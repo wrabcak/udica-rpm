@@ -4,7 +4,7 @@
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
 Version: 0.0.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/wrabcak/udica/archive/master.tar.gz
 License: GPLv3+
 Group: Development/Libraries
@@ -41,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python3_sitelib}/udica/*
 
 %changelog
+* Thu Sep 20 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.1-3
+- Update readme and setup.py files after migration to github
+
 * Sun Sep 16 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.1-2
 - Update LICENSE
 - Improve %files section
