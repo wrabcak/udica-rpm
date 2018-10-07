@@ -1,6 +1,6 @@
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
-Version: 0.0.2
+Version: 0.0.3
 Release: 1%{?dist}
 Source0: https://github.com/containers/udica/archive/v%{version}.tar.gz
 License: GPLv3+
@@ -32,6 +32,10 @@ Tool for generating SELinux security profiles for containers. The whole concept 
 %{python3_sitelib}/udica/*
 
 %changelog
+* Sun Oct 07 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.3-1
+- Remove required parameters -i or -j and added support for reading json file from stdin.
+- Remove "-n" or "--name" parameter. Name of the container will be required for this tool
+
 * Tue Sep 25 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.2-1
 - Use subprocess.Popen instead of subprocess.run for inspecting to support also python2
 
