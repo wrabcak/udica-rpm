@@ -1,13 +1,18 @@
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
 Version: 0.0.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://github.com/containers/udica/archive/v%{version}.tar.gz
 License: GPLv3+
 BuildArch: noarch
 Url: https://github.com/containers/udica
+%if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires: python3 python3-devel python3-setuptools
 Requires: python3 python3-libsemanage python3-libselinux
+%else
+BuildRequires: python2 python2-devel python2-setuptools
+Requires: python2 libsemanage-python libselinux-python
+%endif
 
 %description
 Tool for generating SELinux security profiles for containers. The whole concept is based on "block inheritence" feature inside CIL intermediate language supported by SELinux userspace. The tool creates a policy which combines rules inherited from specified CIL blocks(templates) and rules discovered by inspection of container JSON file, which contains mountpoints and ports definitions.
@@ -16,26 +21,42 @@ Tool for generating SELinux security profiles for containers. The whole concept 
 %setup
 
 %build
+%if 0%{?fedora} || 0%{?rhel} > 7
 %{__python3} setup.py build
+%else
+%{__python2} setup.py build
+%endif
 
 %install
+%if 0%{?fedora} || 0%{?rhel} > 7
 %{__python3} setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT
+%else
+%{__python2} setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT
+%endif
+
 mkdir -p %{buildroot}%{_mandir}/man8
 install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 
 %files
-%license LICENSE
 %{_mandir}/man8/udica.8*
 %{_bindir}/udica
 %dir %{_datadir}/udica
 %{_datadir}/udica/templates/*
-%dir %{python3_sitelib}/udica-*
-%{python3_sitelib}/udica-*
-%dir %{python3_sitelib}/udica
-%{python3_sitelib}/udica/*
 
+%if 0%{?fedora} || 0%{?rhel} > 7
+%license LICENSE
+%{python3_sitelib}/udica/
+%{python3_sitelib}/udica-*.egg-info
+%else
+%{_datarootdir}/licenses/udica/LICENSE
+%{python2_sitelib}/udica/
+%{python2_sitelib}/udica-*.egg-info
+%endif
 
 %changelog
+* Mon Oct 08 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.4-2
+- Build udica on Red Hat Enterprise Linux 7 with python version 2
+
 * Mon Oct 08 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.4-1
 - Add manpages
 - Add support for communicating with libvirt daemon
