@@ -1,6 +1,6 @@
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
-Version: 0.0.5
+Version: 0.1.0
 Release: 1%{?dist}
 Source0: https://github.com/containers/udica/archive/v%{version}.tar.gz
 License: GPLv3+
@@ -54,6 +54,9 @@ install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 %endif
 
 %changelog
+* Sat Oct 13 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.1.0-1
+- Add support for docker containers
+
 * Mon Oct 08 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.5-1
 - Update x_container template based on testing container related to Nvidia Cuda operations
 
