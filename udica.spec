@@ -1,7 +1,7 @@
 Summary: A tool for generating SELinux security policies for containers
 Name: udica
 Version: 0.1.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://github.com/containers/udica/archive/v%{version}.tar.gz
 License: GPLv3+
 BuildArch: noarch
@@ -15,7 +15,8 @@ Requires: python2 libsemanage-python libselinux-python
 %endif
 
 %description
-Tool for generating SELinux security profiles for containers. The tool creates a policy which combines rules inherited from specified CIL blocks(templates) and rules discovered by inspection of container JSON file, which contains mount points and ports definitions.
+Tool for generating SELinux security profiles for containers based on
+inspection of container JSON file.
 
 %prep
 %setup -q
@@ -28,20 +29,22 @@ Tool for generating SELinux security profiles for containers. The tool creates a
 %endif
 
 %install
+install --directory %%{buildroot}%{_datadir}/udica/templates
+
 %if 0%{?fedora} || 0%{?rhel} > 7
 %{__python3} setup.py install --single-version-externally-managed --root=%{buildroot}
 %else
 %{__python2} setup.py install --single-version-externally-managed --root=%{buildroot}
 %endif
 
-mkdir -p %{buildroot}%{_mandir}/man8
+install --directory %{buildroot}%{_mandir}/man8
 install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 
 %files
 %{_mandir}/man8/udica.8*
 %{_bindir}/udica
 %dir %{_datadir}/udica
-%dir %{_datadir}/templates
+%dir %{_datadir}/udica/templates
 %{_datadir}/udica/templates/*
 
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -55,6 +58,9 @@ install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 %endif
 
 %changelog
+* Tue Oct 23 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.1.1-2
+- Fix small issues in spec file like improve description and change files section.
+
 * Mon Oct 22 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.1.1-1
 - Add proper shebang to all source files
 - Add License to all source files
@@ -86,7 +92,7 @@ install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 
 * Sun Sep 16 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.1-2
 - Update LICENSE
-- Improve %files section
+- Improve %%files section
 
 * Sun Sep 16 2018 Lukas Vrabec <lvrabec@redhat.com> - 0.0.1-1
 - Initial build
