@@ -15,10 +15,10 @@ Requires: python2 libsemanage-python libselinux-python
 %endif
 
 %description
-Tool for generating SELinux security profiles for containers. The whole concept is based on "block inheritence" feature inside CIL intermediate language supported by SELinux userspace. The tool creates a policy which combines rules inherited from specified CIL blocks(templates) and rules discovered by inspection of container JSON file, which contains mountpoints and ports definitions.
+Tool for generating SELinux security profiles for containers. The tool creates a policy which combines rules inherited from specified CIL blocks(templates) and rules discovered by inspection of container JSON file, which contains mount points and ports definitions.
 
 %prep
-%setup
+%setup -q
 
 %build
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -29,9 +29,9 @@ Tool for generating SELinux security profiles for containers. The whole concept 
 
 %install
 %if 0%{?fedora} || 0%{?rhel} > 7
-%{__python3} setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT
+%{__python3} setup.py install --single-version-externally-managed --root=%{buildroot}
 %else
-%{__python2} setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT
+%{__python2} setup.py install --single-version-externally-managed --root=%{buildroot}
 %endif
 
 mkdir -p %{buildroot}%{_mandir}/man8
@@ -41,6 +41,7 @@ install -m 0644 udica/man/man8/udica.8 %{buildroot}%{_mandir}/man8/udica.8
 %{_mandir}/man8/udica.8*
 %{_bindir}/udica
 %dir %{_datadir}/udica
+%dir %{_datadir}/templates
 %{_datadir}/udica/templates/*
 
 %if 0%{?fedora} || 0%{?rhel} > 7
